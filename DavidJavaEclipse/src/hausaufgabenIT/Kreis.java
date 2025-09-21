@@ -1,6 +1,6 @@
 package hausaufgabenIT;
 
-public class Kreis {
+public class Kreis implements Flaeche{
 public double radius;
 public double flaeche;
 public double umfang;
@@ -9,7 +9,7 @@ public Kreis(double radius) {
 	this.radius=radius;
 umfang=berechneUmfang();
 flaeche=berechneFlaeche();
-differenzFU=berechneDifferenzFU();
+differenzFU=Math.abs(berechneDifferenzFU());
 }
 private double berechneDifferenzFU() {
 	if (flaeche-umfang>0) {
@@ -18,10 +18,10 @@ private double berechneDifferenzFU() {
 		return -1*(flaeche-umfang);
 	}
 }
-private double berechneFlaeche() {
+public double berechneFlaeche() {
 	return Math.pow(radius, 2)*Math.PI;
 }
-private double berechneUmfang() {
+public double berechneUmfang() {
 	return 2*radius*Math.PI;
 }
 public double getRadius() {
