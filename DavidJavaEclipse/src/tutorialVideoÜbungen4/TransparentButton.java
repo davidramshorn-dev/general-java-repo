@@ -26,7 +26,7 @@ public class TransparentButton extends JButton implements ModComponent {
         setBorderPainted(false);
         setFocusPainted(false);
         setBackground(Color.WHITE);
-        setAlpha(0.5f);
+        setAlpha(0.0f);
         addHoverEffect();
         addActionListener(e -> this.flash());
 
@@ -53,7 +53,7 @@ public class TransparentButton extends JButton implements ModComponent {
 
  // Kurzer Klick-Effekt
     public void flash() {
-        setAlpha(0.25f);
+        setAlpha(0.17f);
         Timer timer = new Timer(150, e -> setAlpha(0.0f));
         timer.setRepeats(false);
         timer.start();

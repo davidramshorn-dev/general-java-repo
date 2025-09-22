@@ -40,7 +40,7 @@ public TransparentButtonDemo2() {
     button.addActionListener(e -> menu.show(button, 0, button.getHeight()));
     
     panel.add(button);
-//    add(panel);
+    add(panel);
     
     //spielfeldSettings
     ImageIcon image2=new ImageIcon("img/spielfeldSettings.png");
@@ -85,7 +85,7 @@ public TransparentButtonDemo2() {
     content.add(player2);
     scroll.setViewportView(content);
     panel3.add(scroll);
-    add(panel3);
+//    add(panel3);
 
 }
 

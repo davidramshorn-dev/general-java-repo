@@ -1,0 +1,69 @@
+Hier eine klare Fehleranalyse-Liste mit Tests und Workarounds:
+
+------------------------------------------------------------------------
+
+1. Test: Prüfen, ob du im richtigen Ordner bist
+
+    pwd        # zeigt aktuellen Pfad
+    ls -a      # prüfe, ob ein .git-Ordner vorhanden ist
+
+-   Problem: kein .git vorhanden → kein Repo.
+-   Workaround: ins richtige Projekt wechseln oder Repo neu klonen.
+
+------------------------------------------------------------------------
+
+2. Test: Minimal-Repo lokal anlegen
+
+    mkdir testrepo
+    cd testrepo
+    git init
+    echo "hi" > test.txt
+    git add test.txt
+    git commit -m "test"
+    git status
+
+-   Problem: wenn das schon hängt → Git blockiert auf deinem Laufwerk.
+-   Workaround: Projekt auf **C:** oder USB-Stick statt
+    Schulnetzlaufwerk ablegen.
+
+------------------------------------------------------------------------
+
+3. Test: Ort des Repos prüfen
+- Wenn dein Projekt auf H:\ oder S:\ liegt → Netzlaufwerk, sehr langsam.
+- Workaround:
+- nach C:\Users\<Name>\Projekte\... kopieren
+- oder auf USB-Stick.
+
+------------------------------------------------------------------------
+
+4. Test: Große Dateien ausschließen
+
+    git status
+
+→ dauert extrem lange, wenn node_modules/ oder große Binaries getrackt
+sind.
+- Workaround: .gitignore nutzen, große Ordner ausschließen.
+
+------------------------------------------------------------------------
+
+5. Test: GitHub Verbindung prüfen (nur für push/pull)
+
+    git ls-remote https://github.com/<user>/<repo>.git
+
+-   Problem: keine Antwort → Firewall blockiert.
+
+-   Workaround 1: Repo mit HTTPS-URL statt SSH klonen.
+
+-   Workaround 2: SSH über Port 443 konfigurieren:
+
+        Host github.com
+          Hostname ssh.github.com
+          Port 443
+
+------------------------------------------------------------------------
+
+6. Falls trotzdem nichts geht:
+- Offline in der Schule arbeiten (git add, git commit funktionieren auch
+ohne Internet).
+- Später zuhause pushen.
+- Alternative: Projekt als ZIP exportieren und über Stick übertragen.
