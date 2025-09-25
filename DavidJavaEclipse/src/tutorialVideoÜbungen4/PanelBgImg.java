@@ -76,6 +76,8 @@ public class PanelBgImg extends JPanel {
             int by = (int) Math.round(mc.getyOrig() * heightRatio);
             int bw = (int) Math.round(mc.getWidthOrig() * widthRatio);
             int bh = (int) Math.round(mc.getHeightOrig() * heightRatio);
+            float size = (float) Math.round(mc.getSizeTextOrig()*widthRatio);
+            if (mc instanceof ModComponent comp) comp.setSizeText(size);
             if (mc instanceof Component comp) comp.setBounds(bx, by, bw, bh);
         }
         revalidate();

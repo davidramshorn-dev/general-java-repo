@@ -3,6 +3,7 @@ package tutorialVideoÜbungen4;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
@@ -13,7 +14,8 @@ import javax.swing.Timer;
 public class TransparentButton extends JButton implements ModComponent {
     private static final long serialVersionUID = 1L;
     private float alpha = 0.0f;
-    private final double xOrig, yOrig, widthOrig, heightOrig;
+    private float alphaOrig = 0.0f;
+    private final double xOrig, yOrig, widthOrig, heightOrig,sizeTextOrig;
 
     public TransparentButton(String text, double xOrig, double yOrig, double widthOrig, double heightOrig) {
         super(text);
@@ -21,12 +23,54 @@ public class TransparentButton extends JButton implements ModComponent {
         this.yOrig = yOrig;
         this.widthOrig = widthOrig;
         this.heightOrig = heightOrig;
+        this.sizeTextOrig=0;
         setContentAreaFilled(false);
         setOpaque(false);
         setBorderPainted(false);
         setFocusPainted(false);
         setBackground(Color.WHITE);
-        setAlpha(0.0f);
+        setAlpha(alpha);
+        addHoverEffect();
+        addActionListener(e -> this.flash());
+
+        // Setze initiale Bounds sofort
+        setBounds((int) xOrig, (int) yOrig, (int) widthOrig, (int) heightOrig);
+    }
+    
+    public TransparentButton(String text, double xOrig, double yOrig, double widthOrig, double heightOrig, Color color) {
+        super(text);
+        this.xOrig = xOrig;
+        this.yOrig = yOrig;
+        this.widthOrig = widthOrig;
+        this.heightOrig = heightOrig;
+        this.sizeTextOrig=0;
+        setContentAreaFilled(false);
+        setOpaque(false);
+        setBorderPainted(false);
+        setFocusPainted(false);
+        setBackground(color);
+        setAlpha(alpha);
+        addHoverEffect();
+        addActionListener(e -> this.flash());
+
+        // Setze initiale Bounds sofort
+        setBounds((int) xOrig, (int) yOrig, (int) widthOrig, (int) heightOrig);
+    }
+    
+    public TransparentButton(String text, double xOrig, double yOrig, double widthOrig, double heightOrig, float alphaOrig, Color color) {
+        super(text);
+        this.xOrig = xOrig;
+        this.yOrig = yOrig;
+        this.widthOrig = widthOrig;
+        this.heightOrig = heightOrig;
+        this.alphaOrig=alphaOrig;
+        this.sizeTextOrig=0;
+        setContentAreaFilled(false);
+        setOpaque(false);
+        setBorderPainted(false);
+        setFocusPainted(false);
+        setBackground(color);
+        setAlpha(alphaOrig);
         addHoverEffect();
         addActionListener(e -> this.flash());
 
@@ -38,6 +82,8 @@ public class TransparentButton extends JButton implements ModComponent {
     @Override public double getyOrig(){ return yOrig;}
     @Override public double getWidthOrig(){ return widthOrig;}
     @Override public double getHeightOrig(){ return heightOrig;}
+    @Override public double getSizeTextOrig() {	return sizeTextOrig;}
+    @Override public void setSizeText(float x) {Font current = this.getFont(); this.setFont(current.deriveFont(x));}
 
     @Override
     protected void paintComponent(Graphics g){ Graphics2D g2 = (Graphics2D) g.create();
@@ -53,11 +99,11 @@ public class TransparentButton extends JButton implements ModComponent {
 
  // Kurzer Klick-Effekt
     public void flash() {
-        setAlpha(0.17f);
-        Timer timer = new Timer(150, e -> setAlpha(0.0f));
+    	  setAlpha(alphaOrig*0.6f+0.17f);
+        Timer timer = new Timer(150, e -> setAlpha(alphaOrig));
         timer.setRepeats(false);
         timer.start();
-
+        setAlpha(alphaOrig*0.6f+0.17f);
     }
     private void addHoverEffect() {
         addMouseListener(new MouseAdapter() {

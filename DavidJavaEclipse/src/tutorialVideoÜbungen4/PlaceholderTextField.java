@@ -6,18 +6,20 @@ import java.awt.*;
 @SuppressWarnings("serial")
 public class PlaceholderTextField extends JTextField implements ModComponent{
     private String placeholder;
-    private final double xOrig, yOrig, widthOrig, heightOrig;
+    private final double xOrig, yOrig, widthOrig, heightOrig, sizeTextOrig;
 
-    public PlaceholderTextField(String placeholder, double xOrig, double yOrig, double widthOrig, double heightOrig) {
+    public PlaceholderTextField(String placeholder, double xOrig, double yOrig, double widthOrig, double heightOrig, double sizeTextOrig) {
         this.placeholder = placeholder;
         this.xOrig = xOrig;
         this.yOrig = yOrig;
         this.widthOrig = widthOrig;
         this.heightOrig = heightOrig;
+        this.sizeTextOrig=sizeTextOrig;
         setOpaque(false);
         setBackground(new Color(0,0,0,0));
         setForeground(Color.white);
         setBorder(null);
+        setCaretColor(Color.WHITE);
 //        setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // z. B. graue Linie
     }
     
@@ -25,6 +27,9 @@ public class PlaceholderTextField extends JTextField implements ModComponent{
     @Override public double getyOrig(){ return yOrig;}
     @Override public double getWidthOrig(){ return widthOrig;}
     @Override public double getHeightOrig(){ return heightOrig;}
+    @Override public double getSizeTextOrig() {	return sizeTextOrig;}
+    @Override public void setSizeText(float x) {Font current = this.getFont(); this.setFont(current.deriveFont(x));}
+
 
     public void setPlaceholder(String text) {
         this.placeholder = text;
