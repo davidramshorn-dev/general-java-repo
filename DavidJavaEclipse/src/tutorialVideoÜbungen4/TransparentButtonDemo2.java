@@ -1,5 +1,6 @@
 package tutorialVideoÜbungen4;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -7,14 +8,22 @@ import javax.swing.*;
 
 public class TransparentButtonDemo2 extends JFrame {    private static final long serialVersionUID = 1L;
 
+public JPanel view;
+public CardLayout cardlayout;
+
 public TransparentButtonDemo2() {
 	
     setTitle("Transparenter Button mit Click-Effekt");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(4000, 2375);
     setLocationRelativeTo(null);
-    
+    setSize(4000, 2375);
     Font global=new Font("Arial", Font.BOLD, 10);
+    
+    view=new JPanel();
+    getContentPane().add(view); 
+//    view.setSize(4000, 2375);
+    cardlayout=new CardLayout();
+    view.setLayout(cardlayout);
     
     //homeScreen
     ImageIcon image=new ImageIcon("img/homeScreen.png");
@@ -39,7 +48,7 @@ public TransparentButtonDemo2() {
     button.addActionListener(e -> menu.show(button, 0, button.getHeight()));
     
     panel.add(button);
-//    add(panel);
+    view.add(panel, "homeScreen");
     
     //spielfeldSettings
     ImageIcon image2=new ImageIcon("img/spielfeldSettings.png");
@@ -61,7 +70,7 @@ public TransparentButtonDemo2() {
     panel2.add(text3);
     panel2.add(text4);
     panel2=addButtons(origBoundsForButtons2, panel2);
-//    add(panel2);
+    view.add(panel2, "spielfeldSettings");
     
     //alleSpieler
     ImageIcon image3=new ImageIcon("img/alleSpieler.png");
@@ -83,7 +92,7 @@ public TransparentButtonDemo2() {
     content.add(player2);
     scroll.setViewportView(content);
     panel3.add(scroll);
-//    add(panel3);
+    view.add(panel3, "alleSpieler");
     
     //spielerSettings
     ImageIcon image4=new ImageIcon("img/spielerSettings.png");
@@ -118,13 +127,13 @@ public TransparentButtonDemo2() {
     panel4.add(button2);
     panel4.add(text41);
     panel4=addButtons(origBoundsForButtons4, panel4);
-//    add(panel4);
+    view.add(panel4, "spielerSettings");
     
   //gewinnerScreen
     ImageIcon image5=new ImageIcon("img/gewinnerScreen.png");
     int[][] origBoundsForButtons5 = {
-            {3370, 1910, 530, 300},   // Button 1
-            {100, 1895, 300, 330},   // Button 2
+            {1220, 1960, 1575, 300},   // Button 1
+            {100, 1945, 300, 330},   // Button 2
         };
     PanelBgImg panel5 = new PanelBgImg(image5);
     addButtons(origBoundsForButtons5, panel5);
@@ -133,8 +142,26 @@ public TransparentButtonDemo2() {
     label.setForeground(Color.white);
     label.setFont(global);
     panel5.add(label);
-    add(panel5);
+    view.add(panel5, "gewinnerScreen");
+    
+    //herausforderungScreen
+    ImageIcon image6=new ImageIcon("img/herausforderungScreen.png");
+    int[][] origBoundsForButtons6 = {
+            {1635, 930, 610, 990},   // Button 1
+            {100, 1895, 300, 330},   // Button 2
+            {2785, 930, 780, 990},   // Button 1
+            {385, 930, 780, 990},   // Button 2
+        };
+    PanelBgImg panel6= new PanelBgImg(image6);
+    addButtons(origBoundsForButtons6, panel6);
+    ModLabel label2=new ModLabel("David's Zug",1370, 1998, 1245, 225, 180);
+    label2.setHorizontalAlignment(SwingConstants.CENTER);
+    label2.setForeground(Color.black);
+    label2.setFont(global);
+    panel6.add(label2);
+    view.add(panel6, "herausforderungScreen");
 
+    zeigePanel("spielfeldSettings");
 }
 
 private PanelBgImg addButtons(int[][] origBounds, PanelBgImg panel) {
@@ -148,6 +175,9 @@ private PanelBgImg addButtons(int[][] origBounds, PanelBgImg panel) {
          panel.add(button);
      }
 	return panel;
+}
+public void zeigePanel(String name) {
+    cardlayout.show(view, name);
 }
 
 public static void main(String[] args) {
