@@ -62,10 +62,6 @@ public class View {
     }
     
  // SpielfeldSettings
-//    JTextField x;
-//    JTextField y;
-//    JTextField pruefLaenge;
-//    JTextField payToWin;     //tickYesChooser...
     PlaceholderTextField x = new PlaceholderTextField("Spielfeld Breite:");
     PlaceholderTextField y = new PlaceholderTextField("Spielfeld Länge:");
     PlaceholderTextField pruefLaenge = new PlaceholderTextField("Prüfende Länge:");
@@ -308,7 +304,7 @@ public class View {
         frame.setVisible(true);
     }
 	@SuppressWarnings("unused")
-	public void initialisiereControllerAktionen(Controller c) {
+	public void initialisiereControllerAktionen(tiktaktoeExtended.Controller controller) {
 	    // Nur wenn die Komponenten nicht null sind
 	    if (spielfeldSettings != null) {
 	        spielfeldSettings.addActionListener((e) -> {
