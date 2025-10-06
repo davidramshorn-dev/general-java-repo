@@ -1,5 +1,7 @@
 package tiktaktoeExtended;
 
+import java.util.Scanner;
+
 public class Spielfeld {
 public int laenge;
 public int limx;
@@ -16,15 +18,18 @@ public Spielfeld(int limx, int limy, int laenge, boolean payToWin){
 	berechneKoordinaten();
 }
 
+public Spielfeld(){
+	this.laenge=4;
+	this.limx=6;
+	this.limy=5;
+	this.payToWin=false;
+	berechneKoordinaten();
+}
+
 public void berechneKoordinaten() {
 	spielfeld=new Koordinate[limx*limy];
 	for (int i=0; i<spielfeld.length; i++) {
-		spielfeld[i]=new Koordinate(i, i%limy, (i-i%limy)/limx);
-		System.out.print("NR-Koordinate: "+ spielfeld[i].nr);
-		System.out.print("      X-Koordinate: "+ spielfeld[i].x);
-		System.out.print("      Y-Koordinate: "+ spielfeld[i].y);
-		System.out.print("      Besitzer-Koordinate: "+ spielfeld[i].besitzer.name);
-		System.out.println();}
+		spielfeld[i]=new Koordinate(i, i%limx, (i-(i%limx))/limx);}
 	
 }
 
@@ -40,73 +45,6 @@ public boolean istBeendet() {
     return sieger != null; // Beispiel: wenn `sieger` gesetzt wurde
 }
 
-public boolean verändereSpielfeld(int x, int y, Spieler spieler) {
-	System.out.println("Methode verändereSpielfeld wurde aufgerufen!");
-    Koordinate feld = spielfeld[y * limx + x];
-    Spieler besitzer = feld.besitzer;
-    System.out.print(besitzer.name+ "   ");
-    System.out.println(spieler.name);
-    System.out.print(besitzer.spielertag+ "   ");
-    System.out.println(spieler.spielertag);
-    if (besitzer.name.equals("default")) {
-        feld.besitzer = spieler;
-        return true;
-    }
-    if (besitzer.name.equals(spieler.name)) {
-        return false;
-    }
-    boolean gewonnen = herausforderung(x, y, spieler);
-    if (gewonnen) {
-        feld.besitzer = spieler;
-        return true;
-    }
-
-    return false;
-}
-public HerausforderungIfo generiereHerausforderung(int x, int y, Spieler spieler) {
-	HerausforderungIfo info=new HerausforderungIfo(x, y, spieler);
-	return info;
-}
-public boolean herausforderung(int x, int y, Spieler spieler) {
-	boolean permition=false;
-//	Scanner scanner= new Scanner(System.in);
-//	System.out.println("Du ("+spieler.name+") hast "+ spielfeld[y * limx + x].besitzer.name+" herausgefordert. \n Gewinne ein Schere, Stein, Papier Spiel gegen ihn, \num das Tik Tak Toe Feld zu übernehmen.");
-//	while (true) {
-//	System.out.println(spieler.name+" ist an der Reihe. Gib Sch, St oder Pa ein: ");
-//	String an1=scanner.nextLine();
-//	System.out.println(spielfeld[y * limx + x].besitzer.name+" ist an der Reihe. Gib Sch, St oder Pa ein: ");
-//	String an2=scanner.nextLine();
-//	if (an1.equals("St")&&an2.equals("Sch")) {System.out.print("yes");
-//		permition= true;
-//		break;
-//	}
-//	else if (an1.equals("Pa")&&an2.equals("St")) {
-//		permition= true;
-//		break;
-//	}
-//	else if (an1.equals("Sch")&&an2.equals("Pa")) {
-//		permition= true;
-//		break;
-//	}
-//	if (an1.equals("Pa")&&an2.equals("Sch")) {
-//		break;
-//	}
-//	else if (an1.equals("Sch")&&an2.equals("St")) {
-//		break;
-//	}
-//	else if (an1.equals("St")&&an2.equals("Pa")) {
-//		break;
-//	}
-//	}
-//	if (permition) {
-//		System.out.println(spieler.name+" hat gewonnen.");
-//	}
-//	else {
-//		System.out.println(spielfeld[y * limx + x].besitzer.name+" hat gewonnen.");
-//	}                
-	return permition;
-}
-
 public void ueberpruefe(Spieler spieler) {
 	ueberpruefeWaagerecht(spieler);
 	ueberpruefeSenkrecht(spieler);
@@ -116,12 +54,14 @@ public void ueberpruefe(Spieler spieler) {
 
 public void ueberpruefeWaagerecht(Spieler spieler) {
 	int zaehler=0;
-	loop: for (int y=0; y<limy; y++) {
+	for (int y=0; y<limy; y++) {
 		for (int i=0; i<limx; i++) {
 		 for (int z=i; z<laenge+i; z++) {
 			if (spielfeld[z+y*(limx-1)].besitzer.spielertag==spielfeld[z+y*(limx-1)+1].besitzer.spielertag&&spielfeld[z+y*(limx-1)].besitzer.spielertag==spieler.spielertag) {zaehler++;
 			if (zaehler>laenge-2) {spieler.gewonnen(true); 
-			break loop;
+        	gibGanzeSpielfeldAus();
+        	System.out.println("waagerechtGewonnen");
+			return;
 			}}
 			else {zaehler=0;}}
 		 
@@ -137,6 +77,8 @@ public void ueberpruefeSenkrecht(Spieler spieler) {
                 spielfeld[nextIndex].besitzer.spielertag.equals(spieler.spielertag)) {
                 zaehler++;
                 if (zaehler >= laenge - 1) {
+                	gibGanzeSpielfeldAus();
+                	System.out.println("senkrechtGewonnen");
                     spieler.gewonnen(true);
                     return;
                 }
@@ -156,6 +98,8 @@ public void ueberpruefe13Diagonal(Spieler spieler) {
 				if (spielfeld[x+(y+i)*limx+i].besitzer.spielertag==spielfeld[x+(y+i+1)*limx+i+1].besitzer.spielertag && spielfeld[x+(y+i)*limx+i].besitzer.spielertag==spieler.spielertag) {
 					zaehler++;
 	                if (zaehler >= laenge - 1) {
+	                	gibGanzeSpielfeldAus();
+	                	System.out.println("diagonal13Gewonnen");
 	                    spieler.gewonnen(true);
 	                    return;
 	                }
@@ -178,6 +122,8 @@ public void ueberpruefe24Diagonal(Spieler spieler) {
 				if (spielfeld[vorgaenger].besitzer.spielertag.equals(spielfeld[nachfolger].besitzer.spielertag) && spielfeld[vorgaenger].besitzer.spielertag.equals(spieler.spielertag)) {
 					zaehler++;
 	                if (zaehler >= laenge - 1) {
+	                	gibGanzeSpielfeldAus();
+	                	System.out.println("diagonal24Gewonnen");
 	                    spieler.gewonnen(true);
 	                    return;
 	                }
@@ -187,6 +133,17 @@ public void ueberpruefe24Diagonal(Spieler spieler) {
 			}
 		}
 	}
+}
+
+public void gibGanzeSpielfeldAus() {
+for (int i=0; i<spielfeld.length;i++) {
+	System.out.print("NR-Koordinate: "+ spielfeld[i].nr);
+	System.out.print("      X-Koordinate: "+ spielfeld[i].x);
+	System.out.print("      Y-Koordinate: "+ spielfeld[i].y);
+	System.out.print("      Besitzer-Koordinate: "+ spielfeld[i].besitzer.name);
+	System.out.println();
+}
+	
 }
 
 }                     

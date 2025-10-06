@@ -2,7 +2,10 @@ package tiktaktoeExtended;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.Queue;
 
 import javax.swing.*;
@@ -12,7 +15,14 @@ public class TransparentButtonDemo2 extends JFrame {    private static final lon
 
 public JPanel view;
 public CardLayout cardlayout;
+public JLayeredPane spielfeldScreen;
 
+public JLayeredPane getSpielfeldScreen(){
+	return spielfeldScreen;
+}
+public void setSpielfeldScreen(JLayeredPane spielfeldScreen) {
+	this.spielfeldScreen=spielfeldScreen;
+}
 public JButton[][] buttons;
 
 public JButton[][] getButtons() {
@@ -139,6 +149,9 @@ TransparentButton applySettingsSpieler;
 public void setName(PlaceholderTextField name) {
 	this.name = name;
 }
+public PlaceholderTextField getNameBsp() {
+	return name;
+}
 public JTextField getSpielertag() {
 	return spielertag;
 }
@@ -249,7 +262,6 @@ public void setZeigeSieger(ModLabel zeigeSieger) {
 	this.zeigeSieger = zeigeSieger;
 }
 
-@SuppressWarnings("unused")
 public TransparentButtonDemo2() {
 	
     setTitle("Transparenter Button mit Click-Effekt");
@@ -314,9 +326,9 @@ public TransparentButtonDemo2() {
     //alleSpieler
     ImageIcon image3=new ImageIcon("img/alleSpieler.png");
     PanelBgImg panel3 = new PanelBgImg(image3);
-    applyListeSpieler=new TransparentButton("", 2950, 1960, 870, 300);
+    applyListeSpieler=new TransparentButton("", 1590, 1950, 630, 330);
     closeListeSpieler=new TransparentButton("",100, 1945, 300, 330);
-    resetAll=new TransparentButton("",1590, 1950, 630, 330);
+    resetAll=new TransparentButton("",2950, 1960, 870, 300);
     panel3.add(closeListeSpieler);
     panel3.add(applyListeSpieler);
     panel3.add(resetAll);
@@ -385,12 +397,71 @@ public TransparentButtonDemo2() {
     spielerAmZug.setFont(global);
     panel6.add(spielerAmZug);
     view.add(panel6, "herausforderungScreen");
+    
+    //spielfeldScreen
+	spielfeldScreen=new JLayeredPane();
+	spielfeldScreen.setPreferredSize(new Dimension(800, 800));
+	spielfeldScreen.setBackground(Color.RED);
+    view.add(spielfeldScreen, "spielfeldScreen");
 
-    zeigePanel("herausforderungScreen");
+    zeigePanel("homeScreen");
 }
 
+public void createSpielPanel(JButton[][] buttons) {
+    // Spielfeld-Panel vorbereiten
+    JPanel spielfeld = new JPanel();
+    int xLim = buttons.length;             // Anzahl der Zeilen (Y-Achse)
+    int yLim = buttons[0].length;
+    spielfeld.setLayout(new GridLayout(xLim, yLim, 1, 1)); // ACHTUNG: yLim und xLim vertauscht!
+    
+    for (JButton[] row : buttons) {
+        for (JButton btn : row) {
+            spielfeld.add(btn);
+        }
+    }
+    // LayeredPane als Container
+    spielfeldScreen = new JLayeredPane();
+	spielfeldScreen.setPreferredSize(new Dimension(800, 800));
+	spielfeld.setBackground(Color.blue);
+	spielfeld.setOpaque(true);
+	spielfeld.setBounds(0, 0, 800, 800);
+    spielfeldScreen.add(spielfeld, Integer.valueOf(0)); // Hintergrund
+
+ // Overlay mit Close-Button im Spielfeld
+    JPanel overlay = new JPanel(null); // kein Layout → manuelle Platzierung
+    overlay.setOpaque(false);
+
+    // Neuen Button speziell für das Spielfeld
+    closeSpielfeld.setBounds(10, 740, 120, 30); // Position
+    overlay.add(closeSpielfeld);
+    overlay.setBounds(0, 0, 800, 800);
+    spielfeldScreen.add(overlay, Integer.valueOf(1)); // Vordergrund
+    
+    refreshView("spielfeldScreen", spielfeldScreen);
+}
+
+private void refreshView(String string, Component screen) {
+	view.remove(screen);
+	view.add(screen, string);
+	view.revalidate();
+	view.repaint();
+}
 public void zeigePanel(String name) {
     cardlayout.show(view, name);
+}
+public void sperreAlleButtons(JButton[][] buttons, Spielfeld spielfeld) {
+    for (int i = 0; i < spielfeld.limy; i++) {
+        for (int j = 0; j < spielfeld.limx; j++) {
+            buttons[i][j].setEnabled(false);
+        }
+    }
+}
+public void entsperreAlleButtons(JButton[][] buttons, Spielfeld spielfeld) {
+    for (int i = 0; i < spielfeld.limy; i++) {
+        for (int j = 0; j < spielfeld.limx; j++) {
+            buttons[i][j].setEnabled(true);
+        }
+    }
 }
 }
 

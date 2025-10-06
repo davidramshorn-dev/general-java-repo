@@ -1,11 +1,13 @@
 package tiktaktoeExtended;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,9 +17,9 @@ public class PlayerPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JScrollPane foundScroll;
     private ComponentAdapter vpListener;
-    private JButton customize=new JButton("Bearbeiten");
-    private JButton delete=new JButton("Löschen");
-    private JLabel label=new JLabel("placeholder");
+    public JButton customize=new JButton("Bearbeiten");
+    public JButton delete=new JButton("Löschen");
+    public JLabel label=new JLabel("placeholder");
 
     public PlayerPanel(String name) {
         setOpaque(false);
@@ -26,6 +28,7 @@ public class PlayerPanel extends JPanel {
         setLayout(new BorderLayout());
         setAlignmentX(Component.LEFT_ALIGNMENT); // wichtig für BoxLayout Y_AXIS
         label.setHorizontalAlignment(WIDTH/2);
+        label.setForeground(Color.WHITE);
 
         JPanel left = new JPanel(); left.setLayout(new BorderLayout());left.add(customize, BorderLayout.CENTER); left.setOpaque(false);
         JPanel center = new JPanel(); center.setLayout(new BorderLayout());center.add(label, BorderLayout.CENTER); center.setOpaque(false);
@@ -94,6 +97,10 @@ public class PlayerPanel extends JPanel {
         Dimension pref = getPreferredSize();
         return new Dimension(Integer.MAX_VALUE, pref.height);
     }
+
+	public AbstractButton getDelete() {
+		return delete;
+	}
 }
 
 
