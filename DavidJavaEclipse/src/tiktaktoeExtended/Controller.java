@@ -8,12 +8,14 @@ import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class Controller {
+	public SoundPlayer backgroundMusic=new SoundPlayer();
+	
+
 public TransparentButtonDemo2 view;
 public Model model;
 public int zaehler=0;
@@ -32,6 +34,7 @@ private boolean payToWin=false;
 private int laenge=4;
 @SuppressWarnings({ "unused" })
 public Controller(TransparentButtonDemo2 view, Model model) {
+	backgroundMusic.play("wav/718167__audiocoffee__star-journey-cinematic-trailer-loop-ver.wav", true);
 	this.model=model;
 	this.view=view;
 	model.spielerZwischenspeicher.add(spieler1Orig);
@@ -212,6 +215,7 @@ private void warteKurz(int ms, Runnable nachher) {
     }).start();
 }
 
+@SuppressWarnings("unused")
 private void createSpielPanel(Spielfeld spielfeld) {
     JButton[][] buttons = new JButton[spielfeld.limy][spielfeld.limx];
     
@@ -371,12 +375,12 @@ private void setSafeActionListener(AbstractButton button, ActionListener newList
     button.addActionListener(newListener);
 }
 
-private void setSafeActionListener(JComboBox<?> comboBox, ActionListener newListener) {
-    for (ActionListener al : comboBox.getActionListeners()) {
-        comboBox.removeActionListener(al);
-    }
-    comboBox.addActionListener(newListener);
-}
+//private void setSafeActionListener(JComboBox<?> comboBox, ActionListener newListener) {
+//    for (ActionListener al : comboBox.getActionListeners()) {
+//        comboBox.removeActionListener(al);
+//    }
+//    comboBox.addActionListener(newListener);
+//}
 public void verändereSpielfeld(int y,int x, Spieler spieler, Spielfeld spielfeld, JButton[][] buttons) {
 	System.out.println("Methode verändereSpielfeld wurde aufgerufen!");
     Koordinate feld = spielfeld.spielfeld[y* spielfeld.limx + x];
