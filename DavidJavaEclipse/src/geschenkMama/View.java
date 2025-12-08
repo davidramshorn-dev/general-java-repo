@@ -304,7 +304,7 @@ public class View {
         frame.setVisible(true);
     }
 	@SuppressWarnings("unused")
-	public void initialisiereControllerAktionen(tiktaktoeExtended.Controller controller) {
+	public void initialisiereControllerAktionen(Controller controller) {
 	    // Nur wenn die Komponenten nicht null sind
 	    if (spielfeldSettings != null) {
 	        spielfeldSettings.addActionListener((e) -> {

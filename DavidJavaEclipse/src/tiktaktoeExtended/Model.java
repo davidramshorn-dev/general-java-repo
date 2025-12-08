@@ -27,9 +27,6 @@ public class Model {
 	public Spieler[] getMitspieler() {
 		return mitspieler;
 	}
-	public LinkedList<Spieler> getSpielerArray() {
-		return spielerArray;
-	}
 	public void setSpielerAmZug(Spieler spielerAmZug) {
 		SpielerAmZug = spielerAmZug;
 	}
@@ -38,9 +35,6 @@ public class Model {
 	}
 	public void setMitspieler(Spieler[] mitspieler) {
 		this.mitspieler = mitspieler;
-	}
-	public void setSpielerArray(LinkedList<Spieler> spielerArray) {
-		this.spielerArray = spielerArray;
 	}
 	public void setSpielfeld(Spielfeld spielfeld) {
 		this.spielfeld = spielfeld;
