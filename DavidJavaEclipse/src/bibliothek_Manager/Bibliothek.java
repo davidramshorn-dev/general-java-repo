@@ -9,8 +9,12 @@ private ArrayList<Medium> medien;
 private HashMap<String, Benutzer> benutzerListe;
 
 public Bibliothek() {
-	ArrayList<Medium> medien=new ArrayList<Medium>();
-	HashMap<String, Benutzer> benutzerListe=new HashMap<String, Benutzer>();
+	medien=new ArrayList<Medium>();
+	benutzerListe=new HashMap<>();
+}
+
+public ArrayList<Medium> getMedien(){
+	return medien;
 }
 
 public void fuegeMediumHinzu(Medium medium) {
@@ -41,10 +45,11 @@ public Medium sucheMedium(int erscheinungsjahr) {
 	return medium;	
 }
 public void verleihe(Benutzer benutzer, int id) {
+	Medium medium=findeId(id);
 	ArrayList<Medium>liste= benutzer.getAusgeliehen();
-	liste.add(findeId(id));
+	liste.add(medium);
 	benutzer.setAusgeliehen(liste);
-	medien.remove(findeId(id));
+	medien.remove(medium);
 }
 private Medium findeId(int id) {
 	Medium medium=null;
@@ -56,6 +61,9 @@ private Medium findeId(int id) {
 	if(medium==null) {
 		System.out.println("Die ID ist nicht im System registriert.");
 	}
+	else {
+		System.out.println("Die ID ist registriert.");
+	}
 	return medium;	
 }
 public void gebeZurueck(Benutzer benutzer, int id) {
@@ -65,14 +73,12 @@ public void gebeZurueck(Benutzer benutzer, int id) {
 	        medium = e;
 	    }
 	}
-	if(medium==null) {
-		System.out.println("Die ID ist nicht im System registriert.");
-	}
-	else {
+	if(medium !=null) {
+		Medium mediumBuecherei=findeId(id);
 		ArrayList<Medium>liste= benutzer.getAusgeliehen();
-		medien.add(findeId(id));
+		medien.add(mediumBuecherei);
 		benutzer.setAusgeliehen(liste);
-		benutzer.getAusgeliehen().remove(findeId(id));
+		benutzer.getAusgeliehen().remove(mediumBuecherei);
 	}
 	
 }

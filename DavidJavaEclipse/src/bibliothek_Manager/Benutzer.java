@@ -8,6 +8,7 @@ private ArrayList<Medium> ausgeliehen;
 public Benutzer(String name) {
 	super();
 	this.name = name;
+	ausgeliehen=new ArrayList<Medium>();
 }
 public ArrayList<Medium> getAusgeliehen(){
 	return ausgeliehen;

@@ -112,12 +112,12 @@ public class DemoViewer {
 
                             // handle rasterization...
                             // for each rasterized pixel:
-                            double depth = b1 * v1.z + b2 * v2.z + b3 * v3.z;
-                            int zIndex = y * img.getWidth() + x;
-                            if (zBuffer[zIndex] < depth) {
-                                img.setRGB(x, y, t.color.getRGB());
-                                zBuffer[zIndex] = depth;
-                            }
+//                            double depth = b1 * v1.z + b2 * v2.z + b3 * v3.z;
+//                            int zIndex = y * img.getWidth() + x;
+//                            if (zBuffer[zIndex] < depth) {
+//                                img.setRGB(x, y, t.color.getRGB());
+//                                zBuffer[zIndex] = depth;
+//                            }
                         }
 
                     	g2.drawImage(img, 0, 0, null);
