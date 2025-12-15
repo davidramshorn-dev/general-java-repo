@@ -11,7 +11,8 @@ public class Chunk {
 		this.world=world;
 		this.col = col;
 		this.row = row;
-		layers.add(new Layer(world));
+		layers.add(new Layer(world, LayerType.LANDSCAPE));
+		layers.add(new Layer(world, LayerType.PLAYER));
 	}
 
 	@Override
