@@ -7,10 +7,16 @@ public class Bibliothek {
 	private int idCounter=0;
 private ArrayList<Medium> medien;
 private HashMap<String, Benutzer> benutzerListe;
+private String name;
 
-public Bibliothek() {
+public Bibliothek(String name) {
 	medien=new ArrayList<Medium>();
 	benutzerListe=new HashMap<>();
+	this.name=name;
+}
+
+public String getName() {
+	return name;
 }
 
 public ArrayList<Medium> getMedien(){
@@ -44,29 +50,23 @@ public Medium sucheMedium(int erscheinungsjahr) {
 	}
 	return medium;	
 }
-public void verleihe(Benutzer benutzer, int id) {
+public void verleihe(Benutzer benutzer, int id) throws MediumNichtGefundenException {
 	Medium medium=findeId(id);
 	ArrayList<Medium>liste= benutzer.getAusgeliehen();
 	liste.add(medium);
 	benutzer.setAusgeliehen(liste);
 	medien.remove(medium);
 }
-private Medium findeId(int id) {
-	Medium medium=null;
-	for (Medium e : medien) {
-	    if (id==e.getId()) {
-	        medium = e;
-	    }
-	}
-	if(medium==null) {
-		System.out.println("Die ID ist nicht im System registriert.");
-	}
-	else {
-		System.out.println("Die ID ist registriert.");
-	}
-	return medium;	
+private Medium findeId(int id) throws MediumNichtGefundenException {
+    for (Medium e : medien) {
+        if (id == e.getId()) {
+            return e;
+        }
+    }
+    throw new MediumNichtGefundenException(id);
 }
-public void gebeZurueck(Benutzer benutzer, int id) {
+
+public void gebeZurueck(Benutzer benutzer, int id) throws MediumNichtGefundenException {
 	Medium medium=null;
 	for (Medium e : benutzer.getAusgeliehen()) {
 	    if (id==e.getId()) {
@@ -82,8 +82,12 @@ public void gebeZurueck(Benutzer benutzer, int id) {
 	}
 	
 }
-public Benutzer sucheNachBenutzer(String password) {
-	if(benutzerListe!=null) {	return benutzerListe.get(password);}
+public Benutzer sucheNachBenutzer(String password, String name2) {
+	if(benutzerListe!=null) {if(benutzerListe.get(password).getName().equals(name2)) {	return benutzerListe.get(password);}}
 	return null;
+}
+
+public HashMap<String, Benutzer> getBenutzerListe() {
+	return benutzerListe;
 }
 }

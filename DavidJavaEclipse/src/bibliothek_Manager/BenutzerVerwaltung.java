@@ -1,15 +1,17 @@
 package bibliothek_Manager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 @SuppressWarnings("resource")
 public class BenutzerVerwaltung {
-	static Bibliothek bibliothek=new Bibliothek();
+	static Bibliothek bibliothek=new Bibliothek("Bibliothek von Babel");
 	static Benutzer benutzer=null;
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
+		System.out.println("Willkommen in der " +bibliothek.getName());
 		
-		while (true) {
+		while (bibliothek!=null) {
 			if(benutzer==null) {
 			begrueßung(scan);}
 			System.out.println("Wählen sie eine dieser Aktionen! (sonst Abmeldung)");
@@ -18,28 +20,45 @@ public class BenutzerVerwaltung {
 			System.out.println("3 Medium suchen.");
 			System.out.println("4 Bibliothek ausgeben.");
 			System.out.println("5 Bibliothek erweitern.");
+			System.out.println("6 Bibliothek verlassen.");
+			System.out.println("7 Benutzer anzeigen.");
 			
 			String response=scan.nextLine();
-
+			try {
 				switch(response) {
 				case "1": mediumAusleihen(scan); break;
 				case "2": mediumZurückgeben(scan); break;
-				case "3": mediumSuchen(); break;
+				case "3": mediumSuchen(scan); break;
 				case "4": bibliothekAusgeben(); break;
 				case "5": bibliothekErweitern(scan); break;
-				default: System.out.println("Sie sind abgemeldet!"); continue;
+				case "6": System.out.println("Sie haben die Bibliothek verlassen!"); bibliothek=null; break;
+				case "7": benutzerAnzeigen(); break;
+				default: System.out.println("Sie sind abgemeldet!"); benutzer=null;
 			}
+			}
+			catch(NumberFormatException h) {
+				 System.out.println("Fehlerhafte Eingabe!");
+			}
+			catch(MediumNichtGefundenException e) {
+				System.out.println("Medium nicht gefunden!");
+			}
+			
 			
 			
 		}
 
 	}
+	private static void benutzerAnzeigen() {
+		// TODO Auto-generated method stub
+		HashMap<String, Benutzer> benutzerListe= bibliothek.getBenutzerListe();
+		benutzerListe.values().forEach(e->{System.out.println(e.getName());});
+		
+	}
 	private static void bibliothekErweitern(Scanner scan) {
 		System.out.println("1 Buch");
 		System.out.println("2 Film");
 		System.out.println("3 Magazin");
-		int response=scan.nextInt();
-		scan.nextLine();
+		int response=Integer.parseInt(scan.nextLine());
 		switch(response) {
 		case 1: buchHinzufügen(scan);break;
 		case 2: filmHinzufügen(scan);break;
@@ -51,8 +70,7 @@ public class BenutzerVerwaltung {
 		System.out.println("Titel?");
 		String titel=scan.nextLine();
 		System.out.println("Jahr?");
-		int jahr=scan.nextInt();
-		scan.nextLine();
+		int jahr=Integer.parseInt(scan.nextLine());
 		System.out.println("Ausgabe?");
 		String ausgabe=scan.nextLine();
 		Magazin magazin=new Magazin(titel, jahr, ausgabe);
@@ -63,13 +81,11 @@ public class BenutzerVerwaltung {
 		System.out.println("Titel?");
 		String titel=scan.nextLine();
 		System.out.println("Jahr?");
-		int jahr=scan.nextInt();
-		scan.nextLine();
+		int jahr=Integer.parseInt(scan.nextLine());
 		System.out.println("Regisseur?");
 		String regisseur=scan.nextLine();
 		System.out.println("Dauer?");
-		int dauer=scan.nextInt();
-		scan.nextLine();
+		int dauer=Integer.parseInt(scan.nextLine());
 		Film film=new Film(titel,jahr, regisseur,dauer);
 		bibliothek.fuegeMediumHinzu(film);
 		
@@ -78,13 +94,11 @@ public class BenutzerVerwaltung {
 		System.out.println("Titel?");
 		String titel=scan.nextLine();
 		System.out.println("Jahr?");
-		int jahr=scan.nextInt();
-		scan.nextLine();
+		int jahr=Integer.parseInt(scan.nextLine());
 		System.out.println("Autor?");
 		String autor=scan.nextLine();
 		System.out.println("Seiten?");
-		int seiten=scan.nextInt();
-		scan.nextLine();
+		int seiten=Integer.parseInt(scan.nextLine());
 		Buch buch=new Buch(titel, jahr, autor, seiten);
 		bibliothek.fuegeMediumHinzu(buch);
 		
@@ -97,17 +111,25 @@ public class BenutzerVerwaltung {
 		}
 		
 	}
-	private static void mediumSuchen() {
-		// TODO Auto-generated method stub
-		
+	private static void mediumSuchen(Scanner scan) {
+		Medium medium=null;
+		String response=scan.nextLine();
+		int converted=Integer.parseInt(response);
+		if(Integer.toString(converted).equals(response)) {
+		medium =bibliothek.sucheMedium(converted);}
+		else {
+			medium =bibliothek.sucheMedium(response);
+		}
+		if(medium!=null) {
+		medium.zeigeInfo();}
 	}
-	private static void mediumZurückgeben(Scanner scan) {
+	private static void mediumZurückgeben(Scanner scan) throws MediumNichtGefundenException {
 			System.out.println("id?");
 			int id=scan.nextInt();
 			bibliothek.gebeZurueck(benutzer, id);
 		
 	}
-	private static void mediumAusleihen(Scanner scan) {
+	private static void mediumAusleihen(Scanner scan) throws MediumNichtGefundenException {
 			System.out.println("id?");
 			int id=scan.nextInt();
 			scan.nextLine();
@@ -116,17 +138,19 @@ public class BenutzerVerwaltung {
 	}
 	
 	private static void begrueßung(Scanner scan) {
+		String password=null;
 		while(benutzer==null) {
-		System.out.println("Passwort? (noch kein Konto, dann ENTER)");
-			String password=scan.nextLine();
-			benutzer=bibliothek.sucheNachBenutzer(password);	
-			while(password.equals("")) {
+			System.out.println("Name? (noch kein Konto, dann ENTER)");
+			String name=scan.nextLine();
+			while(name.equals("")) {
 				System.out.println("Erstellen Sie ein neues Konto.");
 				kreiereNeuenBenutzer();
-				System.out.println("Passwort? (noch kein Konto, dann ENTER)");
-				password=scan.nextLine();
-				benutzer=bibliothek.sucheNachBenutzer(password);	
+				System.out.println("Name? (noch kein Konto, dann ENTER)");
+				name=scan.nextLine();
 			}
+				System.out.println("Passwort?");
+				password=scan.nextLine();
+				benutzer=bibliothek.sucheNachBenutzer(password, name);
 		}
 		System.out.println("Wilkommen "+benutzer.getName());
 		
