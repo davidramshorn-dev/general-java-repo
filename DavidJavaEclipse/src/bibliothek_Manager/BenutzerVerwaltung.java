@@ -1,6 +1,7 @@
 package bibliothek_Manager;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @SuppressWarnings("resource")
@@ -41,6 +42,10 @@ public class BenutzerVerwaltung {
 			}
 			catch(MediumNichtGefundenException e) {
 				System.out.println("Medium nicht gefunden!");
+			}
+			catch(InputMismatchException e) {
+			}
+			catch(NullPointerException e) {
 			}
 			
 			
@@ -137,7 +142,7 @@ public class BenutzerVerwaltung {
 		
 	}
 	
-	private static void begrueßung(Scanner scan) {
+	private static void begrueßung(Scanner scan) throws InputMismatchException, NullPointerException {
 		String password=null;
 		while(benutzer==null) {
 			System.out.println("Name? (noch kein Konto, dann ENTER)");
@@ -150,7 +155,8 @@ public class BenutzerVerwaltung {
 			}
 				System.out.println("Passwort?");
 				password=scan.nextLine();
-				benutzer=bibliothek.sucheNachBenutzer(password, name);
+				if(!password.equals("")) {
+				benutzer=bibliothek.sucheNachBenutzer(password, name);}
 		}
 		System.out.println("Wilkommen "+benutzer.getName());
 		

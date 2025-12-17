@@ -82,7 +82,7 @@ public void gebeZurueck(Benutzer benutzer, int id) throws MediumNichtGefundenExc
 	}
 	
 }
-public Benutzer sucheNachBenutzer(String password, String name2) {
+public Benutzer sucheNachBenutzer(String password, String name2){
 	if(benutzerListe!=null) {if(benutzerListe.get(password).getName().equals(name2)) {	return benutzerListe.get(password);}}
 	return null;
 }
