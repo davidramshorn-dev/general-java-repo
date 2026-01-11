@@ -23,9 +23,8 @@ public class BenutzerVerwaltung {
 			System.out.println("5 Bibliothek erweitern.");
 			System.out.println("6 Bibliothek verlassen.");
 			System.out.println("7 Benutzer anzeigen.");
-			
-			String response=scan.nextLine();
 			try {
+			String response=scan.nextLine();
 				switch(response) {
 				case "1": mediumAusleihen(scan); break;
 				case "2": mediumZurückgeben(scan); break;
@@ -35,21 +34,13 @@ public class BenutzerVerwaltung {
 				case "6": System.out.println("Sie haben die Bibliothek verlassen!"); bibliothek=null; break;
 				case "7": benutzerAnzeigen(); break;
 				default: System.out.println("Sie sind abgemeldet!"); benutzer=null;
+				}
+				
 			}
-			}
-			catch(NumberFormatException h) {
-				 System.out.println("Fehlerhafte Eingabe!");
-			}
-			catch(MediumNichtGefundenException e) {
-				System.out.println("Medium nicht gefunden!");
-			}
-			catch(InputMismatchException e) {
-			}
-			catch(NullPointerException e) {
-			}
-			
-			
-			
+				catch(FalscheEingabeZahl e) {
+					System.out.print(e.getMessage());
+				
+				}
 		}
 
 	}
@@ -59,7 +50,8 @@ public class BenutzerVerwaltung {
 		benutzerListe.values().forEach(e->{System.out.println(e.getName());});
 		
 	}
-	private static void bibliothekErweitern(Scanner scan) {
+	private static void bibliothekErweitern(Scanner scan) throws FalscheEingabeZahl{
+		try {
 		System.out.println("1 Buch");
 		System.out.println("2 Film");
 		System.out.println("3 Magazin");
@@ -68,6 +60,9 @@ public class BenutzerVerwaltung {
 		case 1: buchHinzufügen(scan);break;
 		case 2: filmHinzufügen(scan);break;
 		case 3: magazinHinzufügen(scan);break;
+		}}
+		catch(NumberFormatException e){
+			throw new FalscheEingabeZahl();
 		}
 		
 	}
@@ -128,13 +123,13 @@ public class BenutzerVerwaltung {
 		if(medium!=null) {
 		medium.zeigeInfo();}
 	}
-	private static void mediumZurückgeben(Scanner scan) throws MediumNichtGefundenException {
+	private static void mediumZurückgeben(Scanner scan) {
 			System.out.println("id?");
 			int id=scan.nextInt();
 			bibliothek.gebeZurueck(benutzer, id);
 		
 	}
-	private static void mediumAusleihen(Scanner scan) throws MediumNichtGefundenException {
+	private static void mediumAusleihen(Scanner scan) {
 			System.out.println("id?");
 			int id=scan.nextInt();
 			scan.nextLine();
@@ -142,7 +137,7 @@ public class BenutzerVerwaltung {
 		
 	}
 	
-	private static void begrueßung(Scanner scan) throws InputMismatchException, NullPointerException {
+	private static void begrueßung(Scanner scan) {
 		String password=null;
 		while(benutzer==null) {
 			System.out.println("Name? (noch kein Konto, dann ENTER)");
@@ -156,7 +151,11 @@ public class BenutzerVerwaltung {
 				System.out.println("Passwort?");
 				password=scan.nextLine();
 				if(!password.equals("")) {
+					try {
 				benutzer=bibliothek.sucheNachBenutzer(password, name);}
+					catch(BenutzerNichtGefunden e) {
+						System.out.println(e.getMessage());
+					}}
 		}
 		System.out.println("Wilkommen "+benutzer.getName());
 		

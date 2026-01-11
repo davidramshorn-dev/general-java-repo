@@ -24,18 +24,4 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
-private Medium findeId(int id) {
-	Medium medium=null;
-	for (Medium e : ausgeliehen) {
-	    if (id==e.getId()) {
-	        medium = e;
-	    }
-	}
-	if(medium==null) {
-		System.out.println("Die ID ist nicht im System registriert.");
-	}
-	return medium;	
-}
-
-
 }
