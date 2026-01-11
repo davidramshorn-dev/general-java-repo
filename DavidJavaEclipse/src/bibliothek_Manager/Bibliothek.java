@@ -1,4 +1,4 @@
-package Bibliothek_Manager2_0;
+package bibliothek_Manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,10 +7,20 @@ public class Bibliothek {
 	private int idCounter=0;
 private ArrayList<Medium> medien;
 private HashMap<String, Benutzer> benutzerListe;
+private String name;
 
-public Bibliothek() {
-	ArrayList<Medium> medien=new ArrayList<Medium>();
-	HashMap<String, Benutzer> benutzerListe=new HashMap<String, Benutzer>();
+public Bibliothek(String name) {
+	medien=new ArrayList<Medium>();
+	benutzerListe=new HashMap<>();
+	this.name=name;
+}
+
+public String getName() {
+	return name;
+}
+
+public ArrayList<Medium> getMedien(){
+	return medien;
 }
 
 public void fuegeMediumHinzu(Medium medium) {
@@ -40,44 +50,44 @@ public Medium sucheMedium(int erscheinungsjahr) {
 	}
 	return medium;	
 }
-public void verleihe(Benutzer benutzer, int id) {
+public void verleihe(Benutzer benutzer, int id) throws MediumNichtGefundenException {
+	Medium medium=findeId(id);
 	ArrayList<Medium>liste= benutzer.getAusgeliehen();
-	liste.add(findeId(id));
+	liste.add(medium);
 	benutzer.setAusgeliehen(liste);
-	medien.remove(findeId(id));
+	medien.remove(medium);
 }
-private Medium findeId(int id) {
-	Medium medium=null;
-	for (Medium e : medien) {
-	    if (id==e.getId()) {
-	        medium = e;
-	    }
-	}
-	if(medium==null) {
-		System.out.println("Die ID ist nicht im System registriert.");
-	}
-	return medium;	
+private Medium findeId(int id) throws MediumNichtGefundenException {
+    for (Medium e : medien) {
+        if (id == e.getId()) {
+            return e;
+        }
+    }
+    throw new MediumNichtGefundenException(id);
 }
-public void gebeZurueck(Benutzer benutzer, int id) {
+
+public void gebeZurueck(Benutzer benutzer, int id) throws MediumNichtGefundenException {
 	Medium medium=null;
 	for (Medium e : benutzer.getAusgeliehen()) {
 	    if (id==e.getId()) {
 	        medium = e;
 	    }
 	}
-	if(medium==null) {
-		System.out.println("Die ID ist nicht im System registriert.");
-	}
-	else {
+	if(medium !=null) {
+		Medium mediumBuecherei=findeId(id);
 		ArrayList<Medium>liste= benutzer.getAusgeliehen();
-		medien.add(findeId(id));
+		medien.add(mediumBuecherei);
 		benutzer.setAusgeliehen(liste);
-		benutzer.getAusgeliehen().remove(findeId(id));
+		benutzer.getAusgeliehen().remove(mediumBuecherei);
 	}
 	
 }
-public Benutzer sucheNachBenutzer(String password) {
-	if(benutzerListe!=null) {	return benutzerListe.get(password);}
+public Benutzer sucheNachBenutzer(String password, String name2){
+	if(benutzerListe!=null) {if(benutzerListe.get(password).getName().equals(name2)) {	return benutzerListe.get(password);}}
 	return null;
+}
+
+public HashMap<String, Benutzer> getBenutzerListe() {
+	return benutzerListe;
 }
 }

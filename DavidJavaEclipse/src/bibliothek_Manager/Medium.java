@@ -1,5 +1,4 @@
-package Bibliothek_Manager2_0;
-
+package bibliothek_Manager;
 public abstract class Medium {
 	private int id;
 	private String titel;
